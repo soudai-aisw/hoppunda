@@ -1,0 +1,79 @@
+@startuml
+title Jiraで仕様確認
+actor 委託_記入者
+actor AISW_記入者
+actor AISW_確認者
+actor AI_回答者
+
+participant New
+participant 委託
+participant AISW
+participant AI
+participant Complate
+
+activate New
+委託_記入者 -> New : 新規登録
+AISW_確認者 -> New : 内容確認
+
+alt OK
+    New -> AI : 1発OK
+    activate AI
+else NG
+    New -> 委託 : 差し戻し
+    deactivate New
+    activate 委託
+
+    委託_記入者 -> 委託 : 見直し      
+    委託 -> AISW : 再チェック申請
+    deactivate 委託
+    activate AISW
+
+    AISW_確認者 -> AISW : 内容確認           
+    
+    alt OK
+        AISW -> AI : AIへ確認
+    else NG
+        loop NGの間
+            AISW -> 委託 : 差し戻し
+            activate 委託
+
+            委託_記入者 -> 委託 : 見直し
+            委託 -> AISW : 再チェック申請
+            deactivate 委託
+
+            AISW_確認者 -> AISW :　内容確認
+
+            break OK
+                AISW -> AI :やっとOKだよ・・・
+                deactivate AISW
+            end
+        end
+    end   
+end
+
+alt OK
+    AI_回答者 -> AI : 内容確認
+    AI -> Complate : 回答Getだぜ
+    activate Complate 
+    
+else NG
+    loop NGの間
+        AI -> AISW : 差し戻し
+        activate AISW
+
+        AISW_確認者 -> AISW : 見直し      
+        AISW -> AI : 再チェック申請
+        deactivate AISW
+
+        AI_回答者 -> AI : 要確認
+
+        break OK
+            AI -> Complate : 回答Getだぜ
+            deactivate AI
+            deactivate Complate
+        end  
+    end
+end
+
+
+@enduml
