@@ -1,0 +1,26 @@
+#d2 {
+    border: black solid;
+    border-radius: 25%;
+    font-size: large;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style: italic;
+    color: green;
+}
+
+#env {
+    border: solid;
+}
+
+#content {
+    background-color: aqua;
+}
+
+#contents {
+    width: 250px;
+}
+
+#changeButton {
+    background-color: brown;
+    color: white;
+    font-weight: 100;
+}
